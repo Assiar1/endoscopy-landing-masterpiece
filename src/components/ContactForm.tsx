@@ -2,6 +2,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Send, Check } from 'lucide-react';
 import { useToast } from "@/hooks/use-toast";
+import emailjs from 'emailjs-com';
 
 const ContactForm: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -9,6 +10,7 @@ const ContactForm: React.FC = () => {
   const { toast } = useToast();
   const formRef = useRef<HTMLDivElement>(null);
   const elementsRef = useRef<(HTMLDivElement | null)[]>([]);
+  const emailFormRef = useRef<HTMLFormElement>(null);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -42,8 +44,24 @@ const ContactForm: React.FC = () => {
     e.preventDefault();
     setIsSubmitting(true);
     
-    // Simulate form submission
-    setTimeout(() => {
+    // Configurer EmailJS pour envoyer à voiceilyas@gmail.com
+    const templateParams = {
+      to_email: 'voiceilyas@gmail.com',
+      from_name: (e.currentTarget.elements.namedItem('name') as HTMLInputElement).value,
+      from_email: (e.currentTarget.elements.namedItem('email') as HTMLInputElement).value,
+      message: (e.currentTarget.elements.namedItem('message') as HTMLTextAreaElement).value
+    };
+
+    // Envoyer l'email via EmailJS
+    // Vous devez créer un compte sur emailjs.com et configurer un service et un template
+    emailjs.send(
+      'service_id', // Remplacez par votre service ID
+      'template_id', // Remplacez par votre template ID
+      templateParams,
+      'user_id' // Remplacez par votre user ID
+    )
+    .then((response) => {
+      console.log('Email sent successfully!', response.status, response.text);
       setIsSubmitting(false);
       setIsSuccess(true);
       
@@ -59,8 +77,18 @@ const ContactForm: React.FC = () => {
       }, 3000);
       
       // Reset form
-      (e.target as HTMLFormElement).reset();
-    }, 1500);
+      e.currentTarget.reset();
+    })
+    .catch((error) => {
+      console.error('Failed to send email:', error);
+      setIsSubmitting(false);
+      
+      toast({
+        title: "Erreur",
+        description: "Impossible d'envoyer votre message. Veuillez réessayer plus tard.",
+        variant: "destructive",
+      });
+    });
   };
 
   return (
@@ -85,7 +113,7 @@ const ContactForm: React.FC = () => {
             ref={(el) => (elementsRef.current[0] = el)}
             className="glass-card p-8 animate-on-scroll"
           >
-            <form onSubmit={handleSubmit}>
+            <form ref={emailFormRef} onSubmit={handleSubmit}>
               <div className="mb-6">
                 <label htmlFor="name" className="block text-medical-dark-blue font-medium mb-2">
                   Nom complet
