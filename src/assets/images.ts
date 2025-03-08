@@ -1,40 +1,37 @@
 
 // This file centralizes all image imports for easier management
 
-// These are placeholder images for demonstration purposes
-// Replace these with actual project images
-
 export const images = {
   // Hero section images
   hero: [
-    '/placeholder.svg',
-    '/placeholder.svg',
-    '/placeholder.svg'
+    '/hero-image1.jpg', // Replace with your actual hero image filenames
+    '/hero-image2.jpg',
+    '/hero-image3.jpg'
   ],
   
   // Partner logos
   partners: [
-    '/placeholder.svg',
-    '/placeholder.svg',
-    '/placeholder.svg',
-    '/placeholder.svg',
-    '/placeholder.svg',
-    '/placeholder.svg'
+    '/partner-logo1.png', // Replace with your actual partner logo filenames
+    '/partner-logo2.png',
+    '/partner-logo3.png',
+    '/partner-logo4.png',
+    '/partner-logo5.png',
+    '/partner-logo6.png'
   ],
   
   // Founder images
   founders: [
-    '/placeholder.svg',
-    '/placeholder.svg',
-    '/placeholder.svg',
-    '/placeholder.svg'
+    '/founder1.jpg', // Replace with your actual founder image filenames
+    '/founder2.jpg',
+    '/founder3.jpg',
+    '/founder4.jpg'
   ],
   
   // Video thumbnail
-  videoThumbnail: '/placeholder.svg',
+  videoThumbnail: '/video-thumbnail.jpg',
   
   // Logo
-  logo: '/placeholder.svg'
+  logo: '/logo.png'
 };
 
 export default images;
