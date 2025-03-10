@@ -49,8 +49,20 @@ const Index: React.FC = () => {
         <ProgramHighlights />
         <VideoSection />
         <FoundersCarousel />
-        <FaqSection />
-        <ContactForm />
+        
+        {/* FAQ and Contact sections side by side */}
+        <section className="section-padding bg-white">
+          <div className="container">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              <div className="lg:pr-4">
+                <FaqSection />
+              </div>
+              <div className="lg:pl-4">
+                <ContactForm />
+              </div>
+            </div>
+          </div>
+        </section>
       </main>
       <Footer />
       <ChatbotButton />

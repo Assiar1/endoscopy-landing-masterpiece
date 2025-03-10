@@ -38,7 +38,6 @@ const faqItems = [
 ];
 
 const FaqSection: React.FC = () => {
-  const sectionRef = useRef<HTMLDivElement>(null);
   const elementsRef = useRef<(HTMLDivElement | null)[]>([]);
 
   useEffect(() => {
@@ -70,50 +69,44 @@ const FaqSection: React.FC = () => {
   }, []);
 
   return (
-    <section 
-      id="faq" 
-      className="section-padding bg-white"
-      ref={sectionRef}
-    >
-      <div className="container">
-        <div className="section-title">
-          <h2>Questions fréquentes</h2>
-          <p>
-            Voici les réponses aux questions les plus courantes sur notre diplôme universitaire en endoscopie digestive.
-          </p>
-        </div>
+    <div>
+      <div className="section-title text-left">
+        <h2>Questions fréquentes</h2>
+        <p>
+          Voici les réponses aux questions les plus courantes sur notre diplôme universitaire en endoscopie digestive.
+        </p>
+      </div>
 
-        <div 
-          ref={(el) => (elementsRef.current[0] = el)}
-          className="max-w-3xl mx-auto mt-12 animate-on-scroll"
-        >
-          <div className="glass-card p-8 rounded-2xl">
-            <div className="flex justify-center mb-8">
-              <div className="neumorph-sm inline-flex p-4 rounded-xl">
-                <MessageCircleQuestion className="h-10 w-10 text-medical-blue" />
-              </div>
+      <div 
+        ref={(el) => (elementsRef.current[0] = el)}
+        className="animate-on-scroll"
+      >
+        <div className="glass-card p-6 rounded-2xl">
+          <div className="flex justify-center mb-6">
+            <div className="neumorph-sm inline-flex p-3 rounded-xl">
+              <MessageCircleQuestion className="h-8 w-8 text-medical-blue" />
             </div>
-            
-            <Accordion type="single" collapsible className="w-full">
-              {faqItems.map((item, index) => (
-                <AccordionItem 
-                  key={item.id} 
-                  value={item.id}
-                  className="border-b border-medical-light-blue/30 last:border-0"
-                >
-                  <AccordionTrigger className="text-left text-medical-dark-blue hover:text-medical-blue py-4 font-medium text-lg">
-                    {item.question}
-                  </AccordionTrigger>
-                  <AccordionContent className="text-medical-dark-gray pb-4">
-                    {item.answer}
-                  </AccordionContent>
-                </AccordionItem>
-              ))}
-            </Accordion>
           </div>
+          
+          <Accordion type="single" collapsible className="w-full">
+            {faqItems.map((item) => (
+              <AccordionItem 
+                key={item.id} 
+                value={item.id}
+                className="border-b border-medical-light-blue/30 last:border-0"
+              >
+                <AccordionTrigger className="text-left text-medical-dark-blue hover:text-medical-blue py-3 font-medium">
+                  {item.question}
+                </AccordionTrigger>
+                <AccordionContent className="text-medical-dark-gray pb-3">
+                  {item.answer}
+                </AccordionContent>
+              </AccordionItem>
+            ))}
+          </Accordion>
         </div>
       </div>
-    </section>
+    </div>
   );
 };
 
