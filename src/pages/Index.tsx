@@ -9,6 +9,7 @@ import FoundersCarousel from '@/components/FoundersCarousel';
 import FaqSection from '@/components/FaqSection';
 import ContactForm from '@/components/ContactForm';
 import Footer from '@/components/Footer';
+import ChatbotButton from '@/components/ChatbotButton';
 
 const Index: React.FC = () => {
   useEffect(() => {
@@ -52,6 +53,7 @@ const Index: React.FC = () => {
         <ContactForm />
       </main>
       <Footer />
+      <ChatbotButton />
     </div>
   );
 };
