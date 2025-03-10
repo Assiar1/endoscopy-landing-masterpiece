@@ -2,17 +2,41 @@
 import React, { useState } from 'react';
 import { MessageCircle, X } from 'lucide-react';
 import { useToast } from "@/hooks/use-toast";
+import { chatbotResponses, welcomeMessage, fallbackResponse } from '@/data/chatbotData';
 
 const ChatbotButton: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [message, setMessage] = useState('');
   const [chatHistory, setChatHistory] = useState<{type: 'user' | 'bot', text: string}[]>([
-    {type: 'bot', text: 'Bonjour ! Je suis le chatbot du Diplôme Universitaire en Endoscopie Digestive. Comment puis-je vous aider ?'}
+    {type: 'bot', text: welcomeMessage}
   ]);
   const { toast } = useToast();
 
   const toggleChat = () => {
     setIsOpen(!isOpen);
+  };
+
+  const findBestResponse = (userMessage: string): string => {
+    const lowerCaseMessage = userMessage.toLowerCase();
+    
+    // Rechercher la meilleure correspondance parmi les mots-clés
+    const matchedResponses = chatbotResponses.map(item => {
+      const keywordMatches = item.keywords.filter(keyword => 
+        lowerCaseMessage.includes(keyword.toLowerCase())
+      );
+      return { 
+        response: item.response, 
+        matchCount: keywordMatches.length 
+      };
+    });
+    
+    // Trier par nombre de correspondances
+    matchedResponses.sort((a, b) => b.matchCount - a.matchCount);
+    
+    // Retourner la réponse avec le plus de correspondances, ou la réponse par défaut
+    return matchedResponses[0]?.matchCount > 0 
+      ? matchedResponses[0].response 
+      : fallbackResponse;
   };
 
   const handleSendMessage = (e: React.FormEvent) => {
@@ -25,27 +49,9 @@ const ChatbotButton: React.FC = () => {
     setChatHistory([...chatHistory, {type: 'user', text: userMessage}]);
     setMessage('');
     
-    // Simulate bot response - in a real app, this would be an API call
+    // Get bot response based on message keywords
     setTimeout(() => {
-      let botResponse = '';
-      const lowerCaseMessage = userMessage.toLowerCase();
-      
-      if (lowerCaseMessage.includes('admission') || lowerCaseMessage.includes('conditions')) {
-        botResponse = "Le programme est ouvert aux médecins spécialistes, gastro-entérologues, et internes en dernière année de spécialisation. Un CV et une lettre de motivation sont requis pour l'inscription.";
-      } else if (lowerCaseMessage.includes('durée') || lowerCaseMessage.includes('formation')) {
-        botResponse = "La formation s'étend sur 12 mois, avec des modules théoriques en ligne et des sessions pratiques en présentiel réparties tout au long de l'année.";
-      } else if (lowerCaseMessage.includes('évaluation') || lowerCaseMessage.includes('examen')) {
-        botResponse = "Les évaluations comprennent des examens théoriques, des évaluations pratiques sur simulateurs, et la présentation d'un mémoire de fin de formation.";
-      } else if (lowerCaseMessage.includes('international') || lowerCaseMessage.includes('reconnu')) {
-        botResponse = "Oui, notre diplôme est reconnu par plusieurs associations internationales d'endoscopie digestive et offre des crédits de formation continue valables dans l'Union Européenne.";
-      } else if (lowerCaseMessage.includes('frais') || lowerCaseMessage.includes('prix') || lowerCaseMessage.includes('coût')) {
-        botResponse = "Les frais d'inscription varient selon votre statut et pays d'origine. Nous proposons des tarifs préférentiels pour les médecins des pays en développement. Contactez-nous pour plus d'informations.";
-      } else if (lowerCaseMessage.includes('contact') || lowerCaseMessage.includes('email')) {
-        botResponse = "Vous pouvez nous contacter par email à voiceilyas@gmail.com ou en utilisant le formulaire de contact en bas de page.";
-      } else {
-        botResponse = "Je ne suis pas sûr de comprendre votre question. Pourriez-vous la reformuler ? Vous pouvez me demander des informations sur les conditions d'admission, la durée de la formation, les évaluations, la reconnaissance internationale, ou les frais d'inscription.";
-      }
-      
+      const botResponse = findBestResponse(userMessage);
       setChatHistory(prev => [...prev, {type: 'bot', text: botResponse}]);
     }, 1000);
   };
