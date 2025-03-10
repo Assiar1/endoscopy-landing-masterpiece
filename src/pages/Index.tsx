@@ -6,6 +6,7 @@ import PartnersCarousel from '@/components/PartnersCarousel';
 import ProgramHighlights from '@/components/ProgramHighlights';
 import VideoSection from '@/components/VideoSection';
 import FoundersCarousel from '@/components/FoundersCarousel';
+import FaqSection from '@/components/FaqSection';
 import ContactForm from '@/components/ContactForm';
 import Footer from '@/components/Footer';
 
@@ -47,6 +48,7 @@ const Index: React.FC = () => {
         <ProgramHighlights />
         <VideoSection />
         <FoundersCarousel />
+        <FaqSection />
         <ContactForm />
       </main>
       <Footer />
